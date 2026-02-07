@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
-import { Dashboard, Jobs, Candidates, Settings, JobPositionDetail } from '@/pages';
+import { Dashboard, Jobs, Candidates, Settings, JobPositionDetail, Interviews } from '@/pages';
 
 /**
  * Application Routes Component
@@ -24,6 +24,9 @@ export const AppRoutes: React.FC = () => {
                 {/* Candidates Routes */}
                 <Route path="/candidates" element={<Candidates />} />
                 <Route path="/candidates/:id" element={<div>Candidate Detail (Coming Soon)</div>} />
+
+                {/* Interviews Routes */}
+                <Route path="/interviews" element={<Interviews />} />
 
                 {/* Settings Routes */}
                 <Route path="/settings" element={<Settings />} />
