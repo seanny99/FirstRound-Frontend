@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Briefcase, Users, Settings } from 'lucide-react'
+import { LayoutDashboard, Briefcase, Users, Settings, Calendar } from 'lucide-react'
 import '../../css/Sidebar.css'
 
 const HandshakeLogo: React.FC = () => {
@@ -40,6 +40,10 @@ export const Sidebar: React.FC = () => {
                 <NavLink to="/candidates" className={({ isActive }) => `sidebar-link ${isActive ? 'sidebar-link-active' : ''}`}>
                     <Users size={20} />
                     <span>Candidates</span>
+                </NavLink>
+                <NavLink to="/interviews" className={({ isActive }) => `sidebar-link ${isActive ? 'sidebar-link-active' : ''}`}>
+                    <Calendar size={20} />
+                    <span>Interview</span>
                 </NavLink>
                 <NavLink to="/settings" className={({ isActive }) => `sidebar-link ${isActive ? 'sidebar-link-active' : ''}`}>
                     <Settings size={20} />
