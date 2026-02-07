@@ -160,6 +160,13 @@ body {
   color: #94a3b8;
 }
 
+.kpi-badge-success {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+  margin-left: 0.25rem;
+}
+
 .kpi-value-arrow {
   flex-shrink: 0;
   color: #64748b;
