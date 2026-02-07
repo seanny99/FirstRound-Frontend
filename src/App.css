@@ -1,0 +1,246 @@
+/* Layout */
+.dashboard-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.25rem;
+}
+
+.dashboard-header .tagline {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Stats */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 640px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stat-card {
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Cards */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.card-subtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 0.15rem;
+}
+
+.card-action {
+  flex-shrink: 0;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+/* Rankings table */
+.rankings-card .table-wrap {
+  overflow-x: auto;
+}
+
+.rankings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.rankings-table th,
+.rankings-table td {
+  padding: 0.75rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.rankings-table th {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.rankings-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.score-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 600;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-recommended {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-review {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Red flags */
+.red-flags-card {
+  position: sticky;
+  top: 1rem;
+}
+
+.red-flags-list {
+  list-style: none;
+}
+
+.red-flag {
+  padding: 0.85rem;
+  border-radius: 8px;
+  border-left: 4px solid #e2e8f0;
+  margin-bottom: 0.75rem;
+  background: #f8fafc;
+}
+
+.red-flag:last-child {
+  margin-bottom: 0;
+}
+
+.red-flag.severity-red {
+  border-left-color: #dc2626;
+  background: #fef2f2;
+}
+
+.red-flag.severity-amber {
+  border-left-color: #d97706;
+  background: #fffbeb;
+}
+
+.red-flag.severity-yellow {
+  border-left-color: #ca8a04;
+  background: #fefce8;
+}
+
+.red-flag-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.red-flag-type {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.red-flag-severity {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.red-flag-candidate {
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 0.2rem;
+}
+
+.red-flag-detail {
+  font-size: 0.85rem;
+  color: #64748b;
+}
