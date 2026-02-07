@@ -1,21 +1,29 @@
 import React from 'react'
-import { Card } from '../ui/Card'
+import { ArrowUpRight } from 'lucide-react'
 
-const defaultStats = [
-  { label: 'In Pipeline', value: 24 },
-  { label: 'Completed Sandbox', value: 18 },
-  { label: 'Recommended', value: 7 },
-  { label: 'Pending Review', value: 5 },
+const statsData = [
+  { label: 'Hiring', value: '2', sub: '/100', color: 'dark' },
+  { label: 'Interviewing', value: '12', color: 'orange' },
+  { label: 'Interviewed', value: '89', color: 'blue' },
+  { label: 'Fraud', value: '1', color: 'dark' },
 ]
 
-export function DashboardStats({ items = defaultStats }) {
+export function DashboardStats() {
   return (
     <div className="dashboard-stats">
-      {items.map((item) => (
-        <Card key={item.label} className="stat-card">
-          <span className="stat-value">{item.value}</span>
-          <span className="stat-label">{item.label}</span>
-        </Card>
+      {statsData.map((stat) => (
+        <div key={stat.label} className="stat-card">
+          <div className="stat-card-header">
+            <span className="stat-label">{stat.label}</span>
+            <div className="stat-icon-wrap">
+              <ArrowUpRight size={16} strokeWidth={2.5} />
+            </div>
+          </div>
+          <div className="stat-value-wrap">
+            <span className={`stat-value value-${stat.color}`}>{stat.value}</span>
+            {stat.sub && <span className="stat-sub">{stat.sub}</span>}
+          </div>
+        </div>
       ))}
     </div>
   )
