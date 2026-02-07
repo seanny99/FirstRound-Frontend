@@ -22,10 +22,13 @@ const AvatarPlaceholder: React.FC = () => {
 
 export const JobsTable: React.FC<JobsTableProps> = ({ jobs }) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(100);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    const totalRecords = 100; // Hardcoded to match Figma screenshot example
-    const totalPages = Math.ceil(totalRecords / rowsPerPage);
+    const totalRecords = jobs.length;
+    const totalPages = Math.max(1, Math.ceil(totalRecords / rowsPerPage));
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = Math.min(startIndex + rowsPerPage, totalRecords);
+    const pageJobs = jobs.slice(startIndex, endIndex);
 
     return (
         <div className="jobs-table-footer-wrap">
@@ -41,7 +44,7 @@ export const JobsTable: React.FC<JobsTableProps> = ({ jobs }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {jobs.map((job) => (
+                        {pageJobs.map((job) => (
                             <tr key={job.id}>
                                 <td>
                                     <a href="#" className="job-position-link">{job.title}</a>

@@ -1,20 +1,28 @@
 import React from 'react'
+import type { Resume } from '@/types/resume'
 
-interface Candidate {
-    id: number | string
-    name: string
-    source: 'Proactive' | 'Reactive'
-    score: number
+interface CandidatesTableProps {
+  candidates?: Resume[]
+  loading?: boolean
+  error?: string | null
+  onSelectCandidate?: (candidate: Resume) => void
 }
 
-export const CandidatesTable: React.FC = () => {
-    const candidates: Candidate[] = [
-        { id: 1, name: 'John Doe', source: 'Proactive', score: 94 },
-        { id: 2, name: 'Alan Walker', source: 'Reactive', score: 89 },
-        { id: 3, name: 'Jane Smith', source: 'Proactive', score: 85 },
-        { id: 4, name: 'Emily Davis', source: 'Reactive', score: 92 },
-        { id: 5, name: 'Michael Brown', source: 'Proactive', score: 78 },
-    ]
+export function CandidatesTable({ candidates = [], loading, error, onSelectCandidate }: CandidatesTableProps) {
+    if (loading) {
+        return (
+            <div className="table-wrap">
+                <p className="text-slate-500">Loading candidates…</p>
+            </div>
+        )
+    }
+    if (error) {
+        return (
+            <div className="table-wrap">
+                <p className="text-red-500">Error: {error}</p>
+            </div>
+        )
+    }
 
     return (
         <div className="table-wrap">
@@ -28,27 +36,42 @@ export const CandidatesTable: React.FC = () => {
                 </thead>
                 <tbody>
                     {candidates.map((candidate) => (
-                        <tr key={candidate.id}>
+                        <tr key={candidate._id}>
                             <td>
                                 <div className="job-candidates-cell">
                                     <div
                                         className="job-candidate-avatar"
-                                        style={{ backgroundImage: `url('https://i.pravatar.cc/150?u=${candidate.id}')` }}
-                                    ></div>
-                                    <span className="candidate-name-link">{candidate.name}</span>
+                                        style={{
+                                            backgroundImage: `url('https://i.pravatar.cc/150?u=${encodeURIComponent(candidate.email || candidate._id)}')`,
+                                        }}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="candidate-name-link"
+                                        onClick={() => onSelectCandidate?.(candidate)}
+                                    >
+                                        {candidate.full_name}
+                                    </button>
                                 </div>
                             </td>
                             <td>
-                                <span className={`source-pill pill-${candidate.source.toLowerCase()}`}>
-                                    {candidate.source}
+                                <span className="source-pill pill-reactive">
+                                    {candidate.target_role || '—'}
                                 </span>
                             </td>
                             <td>
                                 <div className="score-row">
                                     <div className="score-bar-container">
-                                        <div className="score-bar-fill" style={{ width: `${candidate.score}%` }}></div>
+                                        <div
+                                            className="score-bar-fill"
+                                            style={{
+                                                width: `${(candidate.skills?.length || 0) * 5}%`,
+                                            }}
+                                        />
                                     </div>
-                                    <span className="score-text">{candidate.score}</span>
+                                    <span className="score-text">
+                                        {candidate.skills?.length ? (candidate.skills.length * 5) : '—'}
+                                    </span>
                                 </div>
                             </td>
                         </tr>
