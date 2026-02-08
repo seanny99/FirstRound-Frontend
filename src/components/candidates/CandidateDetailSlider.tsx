@@ -13,13 +13,7 @@ export const CandidateDetailSlider: React.FC<CandidateDetailSliderProps> = ({
 }) => {
   if (!candidate) return null
 
-  const initials =
-    (candidate.full_name || '?')
-      .split(/\s+/)
-      .map((n) => n[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase() || '?'
+  const avatarUrl = `https://i.pravatar.cc/150?u=${encodeURIComponent(candidate.email || candidate._id)}`
   const skills = candidate.skills ?? []
   const experience = candidate.experience ?? []
   const education = candidate.education ?? []
@@ -43,7 +37,10 @@ export const CandidateDetailSlider: React.FC<CandidateDetailSliderProps> = ({
 
         <div className="candidate-slider-body">
           <div className="candidate-slider-profile">
-            <div className="candidate-slider-avatar candidate-slider-avatar-initials">{initials}</div>
+            <div
+              className="candidate-slider-avatar"
+              style={{ backgroundImage: `url('${avatarUrl}')` }}
+            />
             <p className="candidate-slider-name">{candidate.full_name}</p>
             {matchFromResume != null && (
               <p className="candidate-slider-match">{matchFromResume}% Match (from resume)</p>
