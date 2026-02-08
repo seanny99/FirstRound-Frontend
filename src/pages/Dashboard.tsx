@@ -6,14 +6,14 @@ import { SandboxActivity } from '@/components/dashboard/SandboxActivity'
 
 export const Dashboard: React.FC = () => {
     const proactiveItems = [
-        { name: 'AI Engineer', updated: 'Updated today', count: '100 candidates', showArrow: true },
-        { name: 'XX', updated: 'Updated yesterday', count: '100 candidates', showArrow: true },
-        { name: 'XX', updated: 'Updated by 02/01/2026', count: '100 candidates', showArrow: true },
-        { name: 'XX', updated: 'Updated by 01/01/2026', count: '100 candidates', showArrow: true },
+        { name: 'Senior Product Designer', updated: 'Updated today', count: '100 candidates', showArrow: true },
+        { name: 'Asistant', updated: 'Updated yesterday', count: '100 candidates', showArrow: true },
+        { name: 'Automation Engineer', updated: 'Updated by 02/01/2026', count: '1 candidates', showArrow: true },
+        { name: 'Frontend Developer', updated: 'Updated by 01/01/2026', count: '1 candidates', showArrow: true },
     ]
 
     const reactiveItems = [
-        { name: 'AI Engineer', updated: 'Updated today', customContent: <span className="source-open">XX</span> },
+        { name: 'AI Engineer', updated: 'Updated today', customContent: <span className="source-open">1</span> },
     ]
 
     return (
