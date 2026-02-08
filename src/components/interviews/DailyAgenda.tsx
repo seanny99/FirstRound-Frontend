@@ -7,27 +7,12 @@ interface AgendaItem {
     name: string;
     role: string;
     stage: string;
-    avatar: string;
 }
 
 export const DailyAgenda: React.FC = () => {
     const items: AgendaItem[] = [
-        {
-            id: '1',
-            time: '9:00 AM',
-            name: 'John Doe',
-            role: 'AI Engineer',
-            stage: '1st Round',
-            avatar: 'https://i.pravatar.cc/150?u=1'
-        },
-        {
-            id: '2',
-            time: '11:00 AM',
-            name: 'David Teo',
-            role: 'Senior Software Engineer',
-            stage: 'Final Round',
-            avatar: 'https://i.pravatar.cc/150?u=2'
-        },
+        { id: '1', time: '9:00 AM', name: 'John Doe', role: 'AI Engineer', stage: '1st Round' },
+        { id: '2', time: '11:00 AM', name: 'David Teo', role: 'Senior Software Engineer', stage: 'Final Round' },
     ];
 
     return (
@@ -50,7 +35,9 @@ export const DailyAgenda: React.FC = () => {
                         </div>
                         <div className="item-card">
                             <div className="item-profile">
-                                <img src={item.avatar} alt={item.name} className="item-avatar" />
+                                <div className="item-avatar item-avatar-initials">
+                                    {item.name.split(/\s+/).map((n) => n[0]).join('').slice(0, 2).toUpperCase()}
+                                </div>
                                 <div>
                                     <h4 className="item-name">{item.name}</h4>
                                     <p className="item-role">{item.role}</p>

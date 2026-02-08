@@ -48,6 +48,14 @@ export const Candidates: React.FC = () => {
   const endIndex = Math.min(startIndex + pageSize, total)
   const pageCandidates = filteredCandidates.slice(startIndex, endIndex)
 
+  const now = Date.now()
+  const oneWeekAgo = now - 7 * 24 * 60 * 60 * 1000
+  const newThisWeek = candidates.filter((c: Resume) => {
+    const created = c.created_at ? new Date(c.created_at).getTime() : 0
+    return created >= oneWeekAgo
+  }).length
+  const hasCreatedAt = candidates.some((c: Resume) => c.created_at != null)
+
   const handlePageSizeChange = (rows: number) => {
     setPageSize(rows)
     setPage(1)
@@ -70,7 +78,10 @@ export const Candidates: React.FC = () => {
         <h1>Candidates</h1>
       </header>
 
-      <CandidatesStats />
+      <CandidatesStats
+        total={total}
+        newThisWeek={hasCreatedAt ? newThisWeek : undefined}
+      />
 
       <Card className="jobs-list-card">
         <CardHeader
