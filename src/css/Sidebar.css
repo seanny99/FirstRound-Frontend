@@ -1,12 +1,16 @@
 .sidebar {
   width: 240px;
-  min-height: 100vh;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
   background: var(--surface);
-  /* Blend with page or use white */
-  border-right: 1px solid var(--border-subtle);
+  /* More white background for sidebar */
+  border-right: none;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  overflow-y: auto;
 }
 
 .sidebar-brand {

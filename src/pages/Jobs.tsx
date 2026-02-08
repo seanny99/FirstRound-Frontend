@@ -98,11 +98,13 @@ export const Jobs: React.FC = () => {
 
     return (
         <div className="dashboard-page">
-            <header className="dashboard-header">
-                <h1>Job Positions</h1>
-            </header>
+            <Card className="job-positions-card" style={{ marginBottom: '24px' }}>
+                <header className="dashboard-header" style={{ marginBottom: '24px' }}>
+                    <h1>Job Positions</h1>
+                </header>
 
-            <JobsStats stats={jobKpis} />
+                <JobsStats stats={jobKpis} />
+            </Card>
 
             {error && (
                 <div style={{ padding: '1rem', marginBottom: '1rem', backgroundColor: '#fee', color: '#c00', borderRadius: '4px' }}>

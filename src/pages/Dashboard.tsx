@@ -1,4 +1,5 @@
 import React from 'react'
+import { Card } from '@/components/ui/Card'
 import { DashboardStats } from '@/components/dashboard/DashboardStats'
 import { SourcePanel } from '@/components/dashboard/SourcePanel'
 import { SandboxActivity } from '@/components/dashboard/SandboxActivity'
@@ -17,28 +18,30 @@ export const Dashboard: React.FC = () => {
 
     return (
         <div className="dashboard-page">
-            <header className="dashboard-header">
-                <h1>Dashboard</h1>
-            </header>
+            <Card className="dashboard-container-card">
+                <header className="dashboard-header">
+                    <h1>Dashboard</h1>
+                </header>
 
-            <DashboardStats />
+                <DashboardStats />
 
-            <div className="dashboard-source-row">
-                <SourcePanel
-                    title="Proactive Source"
-                    description="AI automates candidate pipeline from multiple sources. Zero-trust: every profile is verified before shortlist."
-                    items={proactiveItems}
-                />
-                <SourcePanel
-                    title="Reactive Source"
-                    description="Candidates who submitted their resume through the hiring platforms or company website."
-                    items={reactiveItems}
-                />
-            </div>
+                <div className="dashboard-source-row">
+                    <SourcePanel
+                        title="Proactive Source"
+                        description="AI automates candidate pipeline from multiple sources. Zero-trust: every profile is verified before shortlist."
+                        items={proactiveItems}
+                    />
+                    <SourcePanel
+                        title="Reactive Source"
+                        description="Candidates who submitted their resume through the hiring platforms or company website."
+                        items={reactiveItems}
+                    />
+                </div>
 
-            <div className="dashboard-sandbox-row">
-                <SandboxActivity />
-            </div>
+                <div className="dashboard-sandbox-row">
+                    <SandboxActivity />
+                </div>
+            </Card>
         </div>
     )
 }

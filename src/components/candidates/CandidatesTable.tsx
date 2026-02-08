@@ -1,4 +1,3 @@
-
 import type { Resume } from '@/types/resume'
 
 interface CandidatesTableProps {
@@ -39,12 +38,14 @@ export function CandidatesTable({ candidates = [], loading, error, onSelectCandi
                         <tr key={candidate._id}>
                             <td>
                                 <div className="job-candidates-cell">
-                                    <div
-                                        className="job-candidate-avatar"
-                                        style={{
-                                            backgroundImage: `url('https://i.pravatar.cc/150?u=${encodeURIComponent(candidate.email || candidate._id)}')`,
-                                        }}
-                                    />
+                                    <div className="job-candidate-avatar job-candidate-avatar-initials">
+                                        {(candidate.full_name || '?')
+                                            .split(/\s+/)
+                                            .map((n) => n[0])
+                                            .join('')
+                                            .slice(0, 2)
+                                            .toUpperCase() || '?'}
+                                    </div>
                                     <button
                                         type="button"
                                         className="candidate-name-link"
