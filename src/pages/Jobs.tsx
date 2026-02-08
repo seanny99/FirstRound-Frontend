@@ -22,6 +22,7 @@ export const Jobs: React.FC = () => {
     const [jobs, setJobs] = useState<JobDisplay[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
+    const [searchQuery, setSearchQuery] = useState<string>('')
 
     // Fetch jobs from API
     useEffect(() => {
@@ -38,7 +39,7 @@ export const Jobs: React.FC = () => {
                 id: (job.id || job._id || '').toString(),
                 title: job.jobTitle,
                 status: 'Active', // Default status
-                count: 1, // Default count
+                count: job.availablePositions || 1, // Use available positions from API
                 timeline: job.experienceLevel || 'N/A',
                 candidatesMore: 0, // Default
                 salary: job.salaryRangeDisplay,
@@ -55,10 +56,15 @@ export const Jobs: React.FC = () => {
         }
     }
 
-    // Calculate KPIs from real data
+    // Filter jobs based on search query (job title only)
+    const filteredJobs = jobs.filter(job =>
+        job.title.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+
+    // Calculate KPIs from filtered data
     const jobKpis = [
-        { label: 'Open Job Positions', value: jobs.length.toString() },
-        { label: 'Active Positions', value: jobs.filter(j => j.status === 'Active').length.toString() },
+        { label: 'Open Job Positions', value: filteredJobs.length.toString() },
+        { label: 'Active Positions', value: filteredJobs.filter(j => j.status === 'Active').length.toString() },
         { label: 'Total Candidates', value: '0' }, // TODO: Implement when candidates API is ready
         { label: 'Successful Hires', value: '0' }, // TODO: Implement when hires tracking is ready
     ]
@@ -73,6 +79,11 @@ export const Jobs: React.FC = () => {
             Add Job Position
         </button>
     )
+
+    const handleRefresh = () => {
+        setSearchQuery('')
+        fetchJobs()
+    }
 
     if (loading) {
         return (
@@ -102,13 +113,17 @@ export const Jobs: React.FC = () => {
             <Card className="jobs-list-card">
                 <CardHeader
                     title="Job Positions List"
-                    subtitle={`${jobs.length} Job Positions`}
+                    subtitle={`${filteredJobs.length} Job Position${filteredJobs.length !== 1 ? 's' : ''}`}
                     action={addJobButton}
                 />
 
                 <div className="jobs-list-content">
-                    <JobsFilter />
-                    <JobsTable jobs={jobs} />
+                    <JobsFilter
+                        searchQuery={searchQuery}
+                        onSearchChange={setSearchQuery}
+                        onRefresh={handleRefresh}
+                    />
+                    <JobsTable jobs={filteredJobs} />
                 </div>
             </Card>
         </div>

@@ -20,6 +20,7 @@ export const JobPositionDetail: React.FC = () => {
         salaryRangeDisplay: '',
         salaryRangeMin: 0,
         salaryRangeMax: 0,
+        totalPositions: 1,
     })
 
     // Handle input changes
@@ -31,6 +32,14 @@ export const JobPositionDetail: React.FC = () => {
             setFormData(prev => ({
                 ...prev,
                 [name]: value === '' ? 0 : parseFloat(value)
+            }))
+            return
+        }
+
+        if (name === 'totalPositions') {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value === '' ? 1 : parseInt(value, 10)
             }))
             return
         }
@@ -169,6 +178,25 @@ export const JobPositionDetail: React.FC = () => {
                                 required
                                 style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
                             />
+                        </div>
+
+                        <div style={{ marginBottom: '1rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                                Total Positions *
+                            </label>
+                            <input
+                                type="number"
+                                name="totalPositions"
+                                value={formData.totalPositions === 0 ? '' : formData.totalPositions}
+                                onChange={handleChange}
+                                placeholder="1"
+                                min="1"
+                                required
+                                style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
+                            />
+                            <small style={{ color: '#666', fontSize: '0.875rem' }}>
+                                Number of positions available for this role
+                            </small>
                         </div>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>

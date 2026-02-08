@@ -1,11 +1,11 @@
-import React from 'react'
+
 import type { Resume } from '@/types/resume'
 
 interface CandidatesTableProps {
-  candidates?: Resume[]
-  loading?: boolean
-  error?: string | null
-  onSelectCandidate?: (candidate: Resume) => void
+    candidates?: Resume[]
+    loading?: boolean
+    error?: string | null
+    onSelectCandidate?: (candidate: Resume) => void
 }
 
 export function CandidatesTable({ candidates = [], loading, error, onSelectCandidate }: CandidatesTableProps) {

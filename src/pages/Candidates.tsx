@@ -16,37 +16,53 @@ export const Candidates: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
   useEffect(() => {
-    let cancelled = false
-    async function fetchResumes() {
-      try {
-        const res = await fetch(`${API_BASE}/api/resumes`)
-        if (!res.ok) throw new Error(res.statusText)
-        const data = await res.json()
-        if (!cancelled) setCandidates(data.resumes ?? [])
-      } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load candidates')
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    }
     fetchResumes()
-    return () => {
-      cancelled = true
-    }
   }, [])
 
-  const total = candidates.length
+  const fetchResumes = async () => {
+    let cancelled = false
+    try {
+      setLoading(true)
+      const res = await fetch(`${API_BASE}/api/resumes`)
+      if (!res.ok) throw new Error(res.statusText)
+      const data = await res.json()
+      if (!cancelled) setCandidates(data.resumes ?? [])
+    } catch (e) {
+      if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load candidates')
+    } finally {
+      if (!cancelled) setLoading(false)
+    }
+  }
+
+  // Filter candidates based on search query (name only)
+  const filteredCandidates = candidates.filter(candidate =>
+    candidate.full_name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const total = filteredCandidates.length
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
   const startIndex = (page - 1) * pageSize
   const endIndex = Math.min(startIndex + pageSize, total)
-  const pageCandidates = candidates.slice(startIndex, endIndex)
+  const pageCandidates = filteredCandidates.slice(startIndex, endIndex)
 
   const handlePageSizeChange = (rows: number) => {
     setPageSize(rows)
     setPage(1)
   }
+
+  const handleRefresh = () => {
+    setSearchQuery('')
+    setPage(1)
+    fetchResumes()
+  }
+
+  // Reset to page 1 when search changes
+  useEffect(() => {
+    setPage(1)
+  }, [searchQuery])
 
   return (
     <div className="dashboard-page candidates-page">
@@ -68,7 +84,13 @@ export const Candidates: React.FC = () => {
           <div className="jobs-toolbar">
             <div className="jobs-search-wrap">
               <Search className="w-4 h-4 text-slate-400" />
-              <input type="text" className="jobs-search" placeholder="Search" />
+              <input
+                type="text"
+                className="jobs-search"
+                placeholder="Search by candidate name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
             <div className="jobs-toolbar-actions">
               <button type="button" className="btn btn-outline btn-toolbar">
@@ -79,7 +101,7 @@ export const Candidates: React.FC = () => {
                 <Columns className="w-4 h-4" />
                 <span>Column Setting</span>
               </button>
-              <button type="button" className="btn btn-outline btn-toolbar">
+              <button type="button" className="btn btn-outline btn-toolbar" onClick={handleRefresh}>
                 <RefreshCw className="w-4 h-4" />
                 <span>Refresh</span>
               </button>

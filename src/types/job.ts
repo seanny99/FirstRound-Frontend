@@ -18,6 +18,8 @@ export interface JobDescription {
     salaryRangeDisplay: string;
     salaryRangeMin: number;
     salaryRangeMax: number;
+    totalPositions?: number;
+    availablePositions?: number;
     createdAt?: string | Date;
     updatedAt?: string | Date;
 }
@@ -35,6 +37,8 @@ export interface JobDescriptionCreate {
     salaryRangeDisplay: string;
     salaryRangeMin: number;
     salaryRangeMax: number;
+    totalPositions?: number;
+    availablePositions?: number;
 }
 
 /**

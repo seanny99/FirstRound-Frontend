@@ -85,4 +85,19 @@ export const jobsService = {
             throw error;
         }
     },
+
+    /**
+     * Hire a candidate - decrements available positions
+     */
+    async hireCandidate(id: string): Promise<JobDescription> {
+        try {
+            const data = await apiFetch<JobDescription>(API_ENDPOINTS.jobs.hire(id), {
+                method: 'PATCH',
+            });
+            return data;
+        } catch (error) {
+            console.error('Error hiring candidate:', error);
+            throw error;
+        }
+    },
 };

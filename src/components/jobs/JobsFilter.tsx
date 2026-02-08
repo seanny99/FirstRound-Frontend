@@ -1,12 +1,24 @@
 import React from 'react'
 import { Search, Filter, Columns, RefreshCw, Download } from 'lucide-react'
 
-export const JobsFilter: React.FC = () => {
+interface JobsFilterProps {
+    searchQuery: string
+    onSearchChange: (value: string) => void
+    onRefresh?: () => void
+}
+
+export const JobsFilter: React.FC<JobsFilterProps> = ({ searchQuery, onSearchChange, onRefresh }) => {
     return (
         <div className="jobs-toolbar">
             <div className="jobs-search-wrap">
                 <Search className="w-4 h-4 text-slate-400" />
-                <input type="text" className="jobs-search" placeholder="Search" />
+                <input
+                    type="text"
+                    className="jobs-search"
+                    placeholder="Search by job title..."
+                    value={searchQuery}
+                    onChange={(e) => onSearchChange(e.target.value)}
+                />
             </div>
             <div className="jobs-toolbar-actions">
                 <button type="button" className="btn btn-outline btn-toolbar">
@@ -17,7 +29,7 @@ export const JobsFilter: React.FC = () => {
                     <Columns className="w-4 h-4" />
                     <span>Column Setting</span>
                 </button>
-                <button type="button" className="btn btn-outline btn-toolbar" title="Refresh">
+                <button type="button" className="btn btn-outline btn-toolbar" title="Refresh" onClick={onRefresh}>
                     <RefreshCw className="w-4 h-4" />
                     <span>Refresh</span>
                 </button>

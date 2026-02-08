@@ -74,6 +74,7 @@ export const API_ENDPOINTS = {
         create: (): string => `${API_CONFIG.BASE_URL}/jobDescriptions`,
         update: (id: string): string => `${API_CONFIG.BASE_URL}/jobDescriptions/${id}`,
         delete: (id: string): string => `${API_CONFIG.BASE_URL}/jobDescriptions/${id}`,
+        hire: (id: string): string => `${API_CONFIG.BASE_URL}/jobDescriptions/${id}/hire`,
     },
     candidates: {
         getAll: (): string => `${API_CONFIG.BASE_URL}/candidates`,
