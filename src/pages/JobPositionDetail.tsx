@@ -1,11 +1,18 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react'
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { Card, CardHeader } from '@/components/ui/Card'
 import { jobsService } from '@/services/jobsService'
 import { JobDescriptionCreate } from '@/types/job'
 
 export const JobPositionDetail: React.FC = () => {
     const navigate = useNavigate()
+    const params = useParams()
+    const location = useLocation()
+    const jobId = params.id
+    const isNew = location.pathname.endsWith('/new') || !jobId
+    const isEdit = Boolean(jobId) && location.pathname.endsWith('/edit')
+    const isView = Boolean(jobId) && !isEdit
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
 
@@ -22,6 +29,39 @@ export const JobPositionDetail: React.FC = () => {
         salaryRangeMax: 0,
         totalPositions: 1,
     })
+
+    // Fetch existing job when viewing or editing
+    useEffect(() => {
+        const fetchJob = async (id: string) => {
+            setLoading(true)
+            setError(null)
+            try {
+                const job = await jobsService.getJobById(id)
+
+                setFormData({
+                    jobTitle: job.jobTitle || '',
+                    roleOverview: job.roleOverview || '',
+                    responsibilities: Array.isArray(job.responsibilities) && job.responsibilities.length ? job.responsibilities : [''],
+                    requiredSkills: Array.isArray(job.requiredSkills) && job.requiredSkills.length ? job.requiredSkills : [''],
+                    preferredSkills: Array.isArray(job.preferredSkills) && job.preferredSkills.length ? job.preferredSkills : [''],
+                    experienceLevel: job.experienceLevel || '',
+                    salaryRangeDisplay: job.salaryRangeDisplay || '',
+                    salaryRangeMin: job.salaryRangeMin ?? 0,
+                    salaryRangeMax: job.salaryRangeMax ?? 0,
+                    totalPositions: job.totalPositions ?? job.availablePositions ?? 1,
+                })
+            } catch (err) {
+                console.error('Error loading job:', err)
+                setError('Failed to load job data')
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        if (jobId) {
+            fetchJob(jobId)
+        }
+    }, [jobId])
 
     // Handle input changes
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -95,12 +135,17 @@ export const JobPositionDetail: React.FC = () => {
                 throw new Error('Please fill in all required fields')
             }
 
-            // Create job via API
-            await jobsService.createJob(cleanedData)
-
-            // Navigate back to jobs list on success
-            alert('Job position created successfully!')
-            navigate('/jobs')
+            if (isEdit && jobId) {
+                await jobsService.updateJob(jobId, cleanedData)
+                alert('Job position updated successfully!')
+                navigate('/jobs')
+            } else {
+                // Create job via API
+                await jobsService.createJob(cleanedData)
+                // Navigate back to jobs list on success
+                alert('Job position created successfully!')
+                navigate('/jobs')
+            }
         } catch (err) {
             console.error('Error creating job:', err)
             const message = err instanceof Error ? err.message : 'Failed to create job position. Please try again.'
@@ -113,7 +158,7 @@ export const JobPositionDetail: React.FC = () => {
     return (
         <div className="dashboard-page">
             <header className="dashboard-header">
-                <h1>Add Job Position</h1>
+                    <h1>{isNew ? 'Add Job Position' : isEdit ? 'Edit Job Position' : 'Job Position Details'}</h1>
             </header>
 
             <Card>
@@ -139,6 +184,7 @@ export const JobPositionDetail: React.FC = () => {
                                 name="jobTitle"
                                 value={formData.jobTitle}
                                 onChange={handleChange}
+                                disabled={isView}
                                 placeholder="e.g. Senior Product Designer"
                                 required
                                 style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
@@ -153,6 +199,7 @@ export const JobPositionDetail: React.FC = () => {
                                 name="roleOverview"
                                 value={formData.roleOverview}
                                 onChange={handleChange}
+                                disabled={isView}
                                 placeholder="Provide a detailed job description here"
                                 required
                                 rows={4}
@@ -174,6 +221,7 @@ export const JobPositionDetail: React.FC = () => {
                                 name="experienceLevel"
                                 value={formData.experienceLevel}
                                 onChange={handleChange}
+                                disabled={isView}
                                 placeholder="e.g. 1-3 years"
                                 required
                                 style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
@@ -189,6 +237,7 @@ export const JobPositionDetail: React.FC = () => {
                                 name="totalPositions"
                                 value={formData.totalPositions === 0 ? '' : formData.totalPositions}
                                 onChange={handleChange}
+                                disabled={isView}
                                 placeholder="1"
                                 min="1"
                                 required
@@ -209,6 +258,7 @@ export const JobPositionDetail: React.FC = () => {
                                     name="salaryRangeDisplay"
                                     value={formData.salaryRangeDisplay}
                                     onChange={handleChange}
+                                    disabled={isView}
                                     placeholder="e.g. RM 5000 - 8000"
                                     required
                                     style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
@@ -223,6 +273,7 @@ export const JobPositionDetail: React.FC = () => {
                                     name="salaryRangeMin"
                                     value={formData.salaryRangeMin === 0 ? '' : formData.salaryRangeMin}
                                     onChange={handleChange}
+                                    disabled={isView}
                                     placeholder="5000"
                                     required
                                     style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
@@ -237,6 +288,7 @@ export const JobPositionDetail: React.FC = () => {
                                     name="salaryRangeMax"
                                     value={formData.salaryRangeMax === 0 ? '' : formData.salaryRangeMax}
                                     onChange={handleChange}
+                                    disabled={isView}
                                     placeholder="8000"
                                     required
                                     style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
@@ -259,10 +311,11 @@ export const JobPositionDetail: React.FC = () => {
                                         type="text"
                                         value={skill}
                                         onChange={(e) => handleArrayChange('requiredSkills', index, e.target.value)}
+                                        disabled={isView}
                                         placeholder="e.g. React, Python"
                                         style={{ flex: 1, padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
                                     />
-                                    {formData.requiredSkills.length > 1 && (
+                                    {!isView && formData.requiredSkills.length > 1 && (
                                         <button
                                             type="button"
                                             onClick={() => removeArrayItem('requiredSkills', index)}
@@ -273,13 +326,15 @@ export const JobPositionDetail: React.FC = () => {
                                     )}
                                 </div>
                             ))}
-                            <button
-                                type="button"
-                                onClick={() => addArrayItem('requiredSkills')}
-                                style={{ padding: '0.5rem 1rem', backgroundColor: '#4A90E2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-                            >
-                                + Add Skill
-                            </button>
+                            {!isView && (
+                                <button
+                                    type="button"
+                                    onClick={() => addArrayItem('requiredSkills')}
+                                    style={{ padding: '0.5rem 1rem', backgroundColor: '#4A90E2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                                >
+                                    + Add Skill
+                                </button>
+                            )}
                         </div>
 
                         <div style={{ marginBottom: '1rem' }}>
@@ -292,10 +347,11 @@ export const JobPositionDetail: React.FC = () => {
                                         type="text"
                                         value={skill}
                                         onChange={(e) => handleArrayChange('preferredSkills', index, e.target.value)}
+                                        disabled={isView}
                                         placeholder="e.g. Docker, AWS"
                                         style={{ flex: 1, padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
                                     />
-                                    {formData.preferredSkills.length > 1 && (
+                                    {!isView && formData.preferredSkills.length > 1 && (
                                         <button
                                             type="button"
                                             onClick={() => removeArrayItem('preferredSkills', index)}
@@ -306,13 +362,15 @@ export const JobPositionDetail: React.FC = () => {
                                     )}
                                 </div>
                             ))}
-                            <button
-                                type="button"
-                                onClick={() => addArrayItem('preferredSkills')}
-                                style={{ padding: '0.5rem 1rem', backgroundColor: '#4A90E2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-                            >
-                                + Add Skill
-                            </button>
+                            {!isView && (
+                                <button
+                                    type="button"
+                                    onClick={() => addArrayItem('preferredSkills')}
+                                    style={{ padding: '0.5rem 1rem', backgroundColor: '#4A90E2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                                >
+                                    + Add Skill
+                                </button>
+                            )}
                         </div>
 
                         <div style={{ marginBottom: '1rem' }}>
@@ -325,10 +383,11 @@ export const JobPositionDetail: React.FC = () => {
                                         type="text"
                                         value={resp}
                                         onChange={(e) => handleArrayChange('responsibilities', index, e.target.value)}
+                                        disabled={isView}
                                         placeholder="Add a key responsibility"
                                         style={{ flex: 1, padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
                                     />
-                                    {formData.responsibilities.length > 1 && (
+                                    {!isView && formData.responsibilities.length > 1 && (
                                         <button
                                             type="button"
                                             onClick={() => removeArrayItem('responsibilities', index)}
@@ -339,13 +398,15 @@ export const JobPositionDetail: React.FC = () => {
                                     )}
                                 </div>
                             ))}
-                            <button
-                                type="button"
-                                onClick={() => addArrayItem('responsibilities')}
-                                style={{ padding: '0.5rem 1rem', backgroundColor: '#4A90E2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-                            >
-                                + Add Responsibility
-                            </button>
+                            {!isView && (
+                                <button
+                                    type="button"
+                                    onClick={() => addArrayItem('responsibilities')}
+                                    style={{ padding: '0.5rem 1rem', backgroundColor: '#4A90E2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                                >
+                                    + Add Responsibility
+                                </button>
+                            )}
                         </div>
                     </div>
 
@@ -357,15 +418,25 @@ export const JobPositionDetail: React.FC = () => {
                             disabled={loading}
                             style={{ padding: '0.75rem 1.5rem', backgroundColor: '#ddd', color: '#333', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
                         >
-                            Cancel
+                            Back
                         </button>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            style={{ padding: '0.75rem 1.5rem', backgroundColor: '#4A90E2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-                        >
-                            {loading ? 'Creating...' : 'Add Job Position'}
-                        </button>
+                        {isView ? (
+                            <button
+                                type="button"
+                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/jobs/${jobId}/edit`) }}
+                                style={{ padding: '0.75rem 1.5rem', backgroundColor: '#4A90E2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                            >
+                                Edit
+                            </button>
+                        ) : (
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                style={{ padding: '0.75rem 1.5rem', backgroundColor: '#4A90E2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                            >
+                                {loading ? (isEdit ? 'Saving...' : 'Creating...') : (isEdit ? 'Save Changes' : 'Add Job Position')}
+                            </button>
+                        )}
                     </div>
                 </form>
             </Card>

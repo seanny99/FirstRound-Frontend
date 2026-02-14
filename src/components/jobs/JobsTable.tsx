@@ -47,7 +47,7 @@ export const JobsTable: React.FC<JobsTableProps> = ({ jobs }) => {
                         {pageJobs.map((job) => (
                             <tr key={job.id}>
                                 <td>
-                                    <a href="#" className="job-position-link">{job.title}</a>
+                                    <a href={`/jobs/${job.id}`} className="job-position-link">{job.title}</a>
                                 </td>
                                 <td>
                                     <span className={`job-status-pill ${job.status === 'Active' ? 'job-status-active' : ''}`}>
