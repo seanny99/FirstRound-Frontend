@@ -8,7 +8,7 @@ import type { ApiConfig, FetchOptions } from '@/types/job';
 
 // API Base Configuration - will be set by App.tsx
 export let API_CONFIG: ApiConfig = {
-    BASE_URL: 'http://localhost:5000/api',
+    BASE_URL: 'http://localhost:6000/api',
     TIMEOUT: 10000,
 };
 
