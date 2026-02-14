@@ -14,7 +14,7 @@ function App() {
     // Configure API connection to Flask backend
     useEffect(() => {
         setApiConfig({
-            BASE_URL: 'http://localhost:5000/api',
+            BASE_URL: 'http://localhost:5555/api',
             TIMEOUT: 10000,
         });
     }, []);

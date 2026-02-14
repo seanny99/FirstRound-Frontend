@@ -7,7 +7,7 @@ import { Pagination } from '@/components/common/Pagination'
 import { Search, Filter, Columns, RefreshCw, Download } from 'lucide-react'
 import type { Resume } from '@/types/resume'
 
-const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:5000'
+const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:5555'
 
 export const Candidates: React.FC = () => {
   const [selectedCandidate, setSelectedCandidate] = useState<Resume | null>(null)
